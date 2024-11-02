@@ -1,0 +1,5 @@
+https://www.youtube.com/watch?v=sQ3fPyko6o8&t=3282s
+https://github.com/umairjameel321/authjsv5nextjs
+
+npx prisma db push --force-reset 
+to reset all values to empty database
