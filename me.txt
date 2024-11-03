@@ -10,3 +10,11 @@ After build, production,
 
 pm2 start npm --name "auth_nextjs" -- start -- --port=3010
 pm2 save
+
+In this nextjs project, I have used prisma and authjs to create a login and signup page.
+the api selection is automatic
+if we used, npm run dev: it will use the local host
+if we used, npm run build: it will use the production host
+
+env example salt: extra
+
