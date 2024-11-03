@@ -3,3 +3,10 @@ https://github.com/umairjameel321/authjsv5nextjs
 
 npx prisma db push --force-reset 
 to reset all values to empty database
+
+git config --get remote.origin.url   to know the remote url
+
+After build, production,
+
+pm2 start npm --name "auth_nextjs" -- start -- --port=3010
+pm2 save
