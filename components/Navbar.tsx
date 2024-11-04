@@ -1,3 +1,5 @@
+/** @format */
+
 import { auth } from "@/auth";
 import Link from "next/link";
 
@@ -20,11 +22,18 @@ const Navbar = async () => {
 
         <div className="flex items-center gap-x-5">
           {!session?.user ? (
-            <Link href="/sign-in">
-              <div className="bg-blue-600 text-white text-sm px-4 py-2 rounded-sm">
-                Login
-              </div>
-            </Link>
+            <>
+              <Link href="/register">
+                <div className="bg-pink-600 text-white text-sm px-4 py-2 rounded-sm">
+                  Register
+                </div>
+              </Link>
+              <Link href="/sign-in">
+                <div className="bg-blue-600 text-white text-sm px-4 py-2 rounded-sm">
+                  Login
+                </div>
+              </Link>
+            </>
           ) : (
             <>
               <div className="flex items-center gap-x-2 text-sm">

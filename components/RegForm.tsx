@@ -3,12 +3,12 @@
 "use client";
 import React from "react";
 import AuthButton from "./AuthButton";
-import { loginWithCreds } from "@/actions/auth";
+import { registerMe } from "@/actions/auth";
 
-const LoginForm = () => {
+const RegForm = () => {
   return (
     <div>
-      <form action={loginWithCreds} className="w-full flex flex-col gap-4">
+      <form action={registerMe} className="w-full flex flex-col gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-200">
             Email
@@ -18,6 +18,18 @@ const LoginForm = () => {
             placeholder="Email"
             id="Email"
             name="email"
+            className="mt-1 w-full px-4 p-2  h-10 rounded-md border border-gray-200 bg-white text-sm text-gray-700"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-200">
+            Username
+          </label>
+          <input
+            type="text"
+            placeholder="Username"
+            id="Username"
+            name="username"
             className="mt-1 w-full px-4 p-2  h-10 rounded-md border border-gray-200 bg-white text-sm text-gray-700"
           />
         </div>
@@ -34,11 +46,11 @@ const LoginForm = () => {
           />
         </div>
         <div className="mt-4">
-          <AuthButton label="Sign in" />
+          <AuthButton label="Sign up" />
         </div>
       </form>
     </div>
   );
 };
 
-export default LoginForm;
+export default RegForm;

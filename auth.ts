@@ -29,6 +29,11 @@ export const {
           type: "email",
           placeholder: "email@example.com",
         },
+        username: {
+          label: "Username",
+          type: "text",
+          placeholder: "username123",
+        },
         password: { label: "Password", type: "password" },
       },
       authorize: async (credentials) => {
@@ -37,11 +42,13 @@ export const {
         }
 
         const email = credentials.email as string;
+        const username = credentials.username as string;
         const hash = saltAndHashPassword(credentials.password);
 
         let user: any = await db.user.findUnique({
           where: {
             email,
+            // works also  username,
           },
         });
 
@@ -49,6 +56,7 @@ export const {
           user = await db.user.create({
             data: {
               email,
+              username,
               hashedPassword: hash,
             },
           });

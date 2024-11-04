@@ -1,3 +1,5 @@
+/** @format */
+
 "use server";
 
 import { signIn, signOut } from "@/auth";
@@ -33,7 +35,6 @@ export const loginWithCreds = async (formData: FormData) => {
   const rawFormData = {
     email: formData.get("email"),
     password: formData.get("password"),
-    role: "ADMIN",
     redirectTo: "/",
   };
 
@@ -43,10 +44,42 @@ export const loginWithCreds = async (formData: FormData) => {
   try {
     await signIn("credentials", rawFormData);
   } catch (error: any) {
+    console.log("my__errors", error.type);
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
           return { error: "Invalid credentials!" };
+        default:
+          return { error: "Something went wrong!" };
+      }
+    }
+
+    throw error;
+  }
+  revalidatePath("/");
+};
+
+export const registerMe = async (formData: FormData) => {
+  const rawFormData = {
+    email: formData.get("email"),
+    username: formData.get("username"),
+    password: formData.get("password"),
+    redirectTo: "/",
+  };
+
+  const existingUser = await getUserByEmail(formData.get("email") as string);
+  console.log("currentuser", existingUser);
+
+  try {
+    await signIn("credentials", rawFormData);
+  } catch (error: any) {
+    console.log("my__errors", error.type);
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return { error: "Invalid credentials!" };
+        case "CallbackRouteError":
+          return { error: "Wrong data given?" };
         default:
           return { error: "Something went wrong!" };
       }
