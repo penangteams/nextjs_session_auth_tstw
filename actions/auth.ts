@@ -2,8 +2,10 @@
 
 "use server";
 
+import { loginSchema } from "@/app/lib/zodSchema";
 import { signIn, signOut } from "@/auth";
 import { db } from "@/db";
+import { parseWithZod } from "@conform-to/zod";
 import { AuthError } from "next-auth";
 import { revalidatePath } from "next/cache";
 
@@ -38,6 +40,13 @@ export const loginWithCreds = async (formData: FormData) => {
     redirectTo: "/",
   };
 
+  const subimission = parseWithZod(formData, {
+    schema: loginSchema,
+  });
+  if (subimission.status !== "success") {
+    return subimission.reply();
+  }
+
   const existingUser = await getUserByEmail(formData.get("email") as string);
   console.log(existingUser);
 
@@ -59,7 +68,7 @@ export const loginWithCreds = async (formData: FormData) => {
   revalidatePath("/");
 };
 
-export const registerMe = async (formData: FormData) => {
+export const registerMe = async (prevState: unknown, formData: FormData) => {
   const rawFormData = {
     email: formData.get("email"),
     username: formData.get("username"),

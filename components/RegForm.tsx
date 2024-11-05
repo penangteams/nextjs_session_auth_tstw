@@ -4,11 +4,37 @@
 import React from "react";
 import AuthButton from "./AuthButton";
 import { registerMe } from "@/actions/auth";
+import { useForm } from "@conform-to/react";
+import { parseWithZod } from "@conform-to/zod";
+import { registerSchema } from "@/app/lib/zodSchema";
+import { useFormState } from "react-dom";
 
 const RegForm = () => {
+  // @ts-ignore
+  const [lastResult, action] = useFormState<State, FormData>(
+    registerMe,
+    undefined
+  );
+  const [form, fields] = useForm({
+    lastResult,
+    onValidate({ formData }) {
+      return parseWithZod(formData, {
+        schema: registerSchema,
+      });
+    },
+    shouldValidate: "onBlur",
+    shouldRevalidate: "onInput",
+  });
+  var out = " hello world ".replace(/\s/g, "");
+  console.log(out);
   return (
     <div>
-      <form action={registerMe} className="w-full flex flex-col gap-4">
+      <form
+        className="w-full flex flex-col gap-4"
+        id={form.id}
+        onSubmit={form.onSubmit}
+        action={action}
+      >
         <div>
           <label className="block text-sm font-medium text-gray-200">
             Email
@@ -17,9 +43,14 @@ const RegForm = () => {
             type="email"
             placeholder="Email"
             id="Email"
-            name="email"
+            name={fields.email.name}
+            defaultValue={fields.email.initialValue}
             className="mt-1 w-full px-4 p-2  h-10 rounded-md border border-gray-200 bg-white text-sm text-gray-700"
+            key={fields.email.key}
           />
+          <p className="text-red-300 text-sm font-semibold mt-[.5px]">
+            {fields.email.errors}
+          </p>
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-200">
@@ -32,6 +63,9 @@ const RegForm = () => {
             name="username"
             className="mt-1 w-full px-4 p-2  h-10 rounded-md border border-gray-200 bg-white text-sm text-gray-700"
           />
+          <p className="text-red-300 text-sm font-semibold mt-[.5px]">
+            {fields.username.errors}
+          </p>
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-200">
@@ -44,6 +78,9 @@ const RegForm = () => {
             id="password"
             className="mt-1 w-full px-4 p-2  h-10 rounded-md border border-gray-200 bg-white text-sm text-gray-700"
           />
+          <p className="text-red-300 text-sm font-semibold mt-[.5px]">
+            {fields.password.errors}
+          </p>
         </div>
         <div className="mt-4">
           <AuthButton label="Sign up" />

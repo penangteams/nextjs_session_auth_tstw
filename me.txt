@@ -18,3 +18,10 @@ if we used, npm run build: it will use the production host
 
 env example salt: extra
 
+************ Validation ************
+https://www.youtube.com/watch?v=SJjP7zdYv_s
+
+ // @ts-ignore
+ for useFormState
+
+ 
