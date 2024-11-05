@@ -1,4 +1,6 @@
-import { auth } from "@/auth";
+/** @format */
+
+import { auth } from "@/auth_reg";
 import { NextResponse } from "next/server";
 
 export const GET = auth(function GET(req) {

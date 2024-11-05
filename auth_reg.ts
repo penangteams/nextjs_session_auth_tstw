@@ -42,9 +42,13 @@ export const {
         }
 
         const email = credentials.email as string;
-        const username = credentials.username as string;
-        const hash = saltAndHashPassword(credentials.password);
-
+        let username = credentials.username as string;
+        let password = credentials.password as string;
+        //trim removes head and tail whitespaces, replaceAll removes inbetween whitespaces
+        username = username.trim().replaceAll(/\s*/g, "");
+        password = password.trim().replaceAll(/\s*/g, "");
+        const hash = saltAndHashPassword(password);
+        console.log("HaSh", hash, password);
         let user: any = await db.user.findUnique({
           where: {
             email,
@@ -61,13 +65,14 @@ export const {
             },
           });
         } else {
-          const isMatch = bcrypt.compareSync(
-            credentials.password as string,
-            user.hashedPassword
-          );
-          if (!isMatch) {
-            throw new Error("Incorrect password.");
-          }
+          // const isMatch = bcrypt.compareSync(
+          //   credentials.password as string,
+          //   user.hashedPassword
+          // );
+          // if (!isMatch) {
+          //   throw new Error("Incorrect password.");
+          // }
+          //do nothing
         }
 
         return user;

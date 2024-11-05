@@ -1,6 +1,6 @@
 /** @format */
 
-import { auth } from "@/auth";
+import { auth } from "@/auth_reg";
 import Link from "next/link";
 
 import Image from "next/image";

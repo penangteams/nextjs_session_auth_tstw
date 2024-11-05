@@ -1,4 +1,6 @@
-import { auth } from "@/auth";
+/** @format */
+
+import { auth } from "@/auth_reg";
 import { redirect } from "next/navigation";
 import React from "react";
 

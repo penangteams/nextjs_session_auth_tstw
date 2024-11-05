@@ -1,1 +1,3 @@
-export { GET, POST } from "@/auth";
+/** @format */
+
+export { GET, POST } from "@/auth_reg";

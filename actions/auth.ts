@@ -3,7 +3,8 @@
 "use server";
 
 import { loginSchema } from "@/app/lib/zodSchema";
-import { signIn, signOut } from "@/auth";
+import { signIn as sReg, signOut } from "@/auth_reg";
+import { signIn as sLog } from "@/auth_login";
 import { db } from "@/db";
 import { parseWithZod } from "@conform-to/zod";
 import { AuthError } from "next-auth";
@@ -24,7 +25,7 @@ const getUserByEmail = async (email: string) => {
 };
 
 export const login = async (provider: string) => {
-  await signIn(provider, { redirectTo: "/" });
+  await sLog(provider, { redirectTo: "/" });
   revalidatePath("/");
 };
 
@@ -51,7 +52,7 @@ export const loginWithCreds = async (formData: FormData) => {
   console.log(existingUser);
 
   try {
-    await signIn("credentials", rawFormData);
+    await sLog("credentials", rawFormData);
   } catch (error: any) {
     console.log("my__errors", error.type);
     if (error instanceof AuthError) {
@@ -80,7 +81,7 @@ export const registerMe = async (prevState: unknown, formData: FormData) => {
   console.log("currentuser", existingUser);
 
   try {
-    await signIn("credentials", rawFormData);
+    await sReg("credentials", rawFormData);
   } catch (error: any) {
     console.log("my__errors", error.type);
     if (error instanceof AuthError) {

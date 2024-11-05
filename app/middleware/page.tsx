@@ -1,4 +1,6 @@
-import { auth } from "@/auth";
+/** @format */
+
+import { auth } from "@/auth_reg";
 import React from "react";
 
 const Middleware = async () => {
