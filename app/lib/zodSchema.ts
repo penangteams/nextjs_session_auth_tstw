@@ -19,6 +19,7 @@ export const registerSchema = z.object({
   //   .min(5, { message: "Username must more than 4 characters" })
   //   .max(8, { message: "Username must less than 9 characters" }),
   // does not count whitespace
+  // username: z.coerce.number().int().lte(9999),
   username: z
     .string()
     .trim()

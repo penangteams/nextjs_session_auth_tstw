@@ -6,7 +6,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { db } from "./db";
-import { saltAndHashPassword } from "./utils/helper";
+import { cookies } from "next/headers";
 
 export const {
   handlers: { GET, POST },
@@ -67,6 +67,7 @@ export const {
           if (!isMatch) {
             throw new Error("Incorrect password.");
           }
+          cookies().set("name", "Successfully logged in", { secure: true });
         }
 
         return user;

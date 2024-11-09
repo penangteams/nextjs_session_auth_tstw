@@ -24,4 +24,5 @@ https://www.youtube.com/watch?v=SJjP7zdYv_s
  // @ts-ignore
  for useFormState
 
- 
+ cookies
+ https://medium.com/@thisishadisyazdi/exploring-cookies-in-next-js-6a6bfe0fa024

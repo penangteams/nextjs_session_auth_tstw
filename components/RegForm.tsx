@@ -1,13 +1,15 @@
 /** @format */
 
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import AuthButton from "./AuthButton";
 import { registerMe } from "@/actions/auth";
 import { useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { registerSchema } from "@/app/lib/zodSchema";
 import { useFormState } from "react-dom";
+import toast from "react-hot-toast";
+import { useCookies } from "react-cookie";
 
 const RegForm = () => {
   // @ts-ignore
@@ -15,6 +17,7 @@ const RegForm = () => {
     registerMe,
     undefined
   );
+  const [cookies, setCookie, removeCookie] = useCookies(["regs", "errReg"]);
   const [form, fields] = useForm({
     lastResult,
     onValidate({ formData }) {
@@ -25,8 +28,22 @@ const RegForm = () => {
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",
   });
-  var out = " hello world ".replace(/\s/g, "");
-  console.log(out);
+
+  useEffect(() => {
+    // works better with cookies
+    // if (lastResult?.error) {
+    //   toast(lastResult?.error);
+    // }
+    if (cookies?.errReg) {
+      toast(cookies?.errReg);
+      removeCookie("errReg");
+    }
+    if (cookies?.regs) {
+      toast(cookies?.regs);
+      removeCookie("regs");
+    }
+  }, [lastResult, cookies]);
+
   return (
     <div>
       <form
@@ -44,7 +61,7 @@ const RegForm = () => {
             placeholder="Email"
             id="Email"
             name={fields.email.name}
-            defaultValue={fields.email.initialValue}
+            // defaultValue={fields.email.initialValue}
             className="mt-1 w-full px-4 p-2  h-10 rounded-md border border-gray-200 bg-white text-sm text-gray-700"
             key={fields.email.key}
           />

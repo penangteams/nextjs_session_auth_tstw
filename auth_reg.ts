@@ -4,9 +4,9 @@ import NextAuth from "next-auth";
 import Github from "next-auth/providers/github";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import Credentials from "next-auth/providers/credentials";
-import bcrypt from "bcryptjs";
 import { db } from "./db";
 import { saltAndHashPassword } from "./utils/helper";
+import { cookies } from "next/headers";
 
 export const {
   handlers: { GET, POST },
@@ -48,7 +48,7 @@ export const {
         username = username.trim().replaceAll(/\s*/g, "");
         password = password.trim().replaceAll(/\s*/g, "");
         const hash = saltAndHashPassword(password);
-        console.log("HaSh", hash, password);
+
         let user: any = await db.user.findUnique({
           where: {
             email,
@@ -57,13 +57,17 @@ export const {
         });
 
         if (!user) {
-          user = await db.user.create({
-            data: {
-              email,
-              username,
-              hashedPassword: hash,
-            },
-          });
+          try {
+            user = await db.user.create({
+              data: {
+                email,
+                username,
+                hashedPassword: hash,
+              },
+            });
+          } catch (e) {
+            console.log(e);
+          }
         } else {
           // const isMatch = bcrypt.compareSync(
           //   credentials.password as string,
@@ -73,8 +77,10 @@ export const {
           //   throw new Error("Incorrect password.");
           // }
           //do nothing
+          cookies().set("errReg", "User exists, login now!", { secure: true });
+          return false;
         }
-
+        cookies().set("regs", "Successfully registered", { secure: true });
         return user;
       },
     }),

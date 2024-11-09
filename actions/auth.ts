@@ -1,7 +1,7 @@
 /** @format */
 
 "use server";
-
+import { cookies } from "next/headers";
 import { loginSchema } from "@/app/lib/zodSchema";
 import { signIn as sReg, signOut } from "@/auth_reg";
 import { signIn as sLog } from "@/auth_login";
@@ -30,15 +30,19 @@ export const login = async (provider: string) => {
 };
 
 export const logout = async () => {
+  cookies().delete("name");
   await signOut({ redirectTo: "/" });
   revalidatePath("/");
 };
 
-export const loginWithCreds = async (formData: FormData) => {
+export const loginWithCreds = async (
+  prevState: unknown,
+  formData: FormData
+) => {
   const rawFormData = {
     email: formData.get("email"),
     password: formData.get("password"),
-    redirectTo: "/",
+    redirectTo: "/middleware",
   };
 
   const subimission = parseWithZod(formData, {
@@ -48,18 +52,21 @@ export const loginWithCreds = async (formData: FormData) => {
     return subimission.reply();
   }
 
-  const existingUser = await getUserByEmail(formData.get("email") as string);
-  console.log(existingUser);
+  // const existingUser = await getUserByEmail(formData.get("email") as string);
+  // console.log(existingUser);
 
   try {
     await sLog("credentials", rawFormData);
   } catch (error: any) {
-    console.log("my__errors", error.type);
     if (error instanceof AuthError) {
       switch (error.type) {
-        case "CredentialsSignin":
+        case "CallbackRouteError":
+          // works but set cookie better return { error: "Invalid credentials!" };
+          cookies().set("error2", "Invalid credentials!", { secure: true });
           return { error: "Invalid credentials!" };
         default:
+          // works but set cookie better return { error: "Something went wrong!" };
+          cookies().set("error2", "Something went wrong!", { secure: true });
           return { error: "Something went wrong!" };
       }
     }
@@ -74,7 +81,7 @@ export const registerMe = async (prevState: unknown, formData: FormData) => {
     email: formData.get("email"),
     username: formData.get("username"),
     password: formData.get("password"),
-    redirectTo: "/",
+    redirectTo: "/middleware",
   };
 
   const existingUser = await getUserByEmail(formData.get("email") as string);
@@ -83,7 +90,6 @@ export const registerMe = async (prevState: unknown, formData: FormData) => {
   try {
     await sReg("credentials", rawFormData);
   } catch (error: any) {
-    console.log("my__errors", error.type);
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
