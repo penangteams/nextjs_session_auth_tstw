@@ -55,8 +55,13 @@ export const {
             // works also  username,
           },
         });
-
-        if (!user) {
+        let user2: any = await db.user.findUnique({
+          where: {
+            username,
+          },
+        });
+        //we check if user exists both for email and username
+        if (!user && !user2) {
           try {
             user = await db.user.create({
               data: {
