@@ -5,7 +5,21 @@ import { z } from "zod";
 //https://stackoverflow.com/questions/77134910/how-can-i-remove-all-whitespace-in-zod
 //https://stackoverflow.com/questions/77594561/how-to-remove-whitespace-from-within-a-string-using-zod
 export const loginSchema = z.object({
-  email: z.string().email(),
+  username: z
+    .string()
+    .trim()
+    .transform((s, ctx) => {
+      const withoutWhitespace = s.replaceAll(/\s*/g, "");
+      if (withoutWhitespace.length !== 4) {
+        //can for 4d, 3d, 2d
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "You must enter 4 digits",
+        });
+        return z.NEVER;
+      }
+      return withoutWhitespace;
+    }),
   password: z
     .string()
     .min(4, { message: "Password must more than 3 characters" })

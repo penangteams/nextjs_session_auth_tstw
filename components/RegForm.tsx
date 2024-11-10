@@ -60,10 +60,9 @@ const RegForm = () => {
             type="email"
             placeholder="Email"
             id="Email"
-            name={fields.email.name}
+            name="email"
             // defaultValue={fields.email.initialValue}
             className="mt-1 w-full px-4 p-2  h-10 rounded-md border border-gray-200 bg-white text-sm text-gray-700"
-            key={fields.email.key}
           />
           <p className="text-red-300 text-sm font-semibold mt-[.5px]">
             {fields.email.errors}

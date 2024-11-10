@@ -40,7 +40,7 @@ export const loginWithCreds = async (
   formData: FormData
 ) => {
   const rawFormData = {
-    email: formData.get("email"),
+    username: formData.get("username"),
     password: formData.get("password"),
     redirectTo: "/middleware",
   };

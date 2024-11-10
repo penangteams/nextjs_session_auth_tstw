@@ -37,16 +37,17 @@ export const {
         password: { label: "Password", type: "password" },
       },
       authorize: async (credentials) => {
-        if (!credentials || !credentials.email || !credentials.password) {
+        if (!credentials || !credentials.username || !credentials.password) {
           return null;
         }
 
-        const email = credentials.email as string;
+        // const email = credentials.email as string;
+        const username = credentials.username as string;
 
         let user: any = await db.user.findUnique({
           where: {
-            email,
-            // works also  username,
+            username,
+            // works also  email,
           },
         });
 
